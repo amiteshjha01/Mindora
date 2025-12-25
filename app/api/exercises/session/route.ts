@@ -17,10 +17,12 @@ export async function POST(request: NextRequest) {
     }
 
     const sessionId = await createExerciseSession({
-      userId: user.userId,
-      exerciseId,
-      completedAt: completedAt ? new Date(completedAt) : new Date(),
-    })
+  userId: user.userId,
+  exerciseId,
+  duration: "N/A",
+  completedAt: completedAt ? new Date(completedAt) : new Date(),
+})
+
 
     return NextResponse.json({ success: true, sessionId }, { status: 201 })
   } catch (error) {
