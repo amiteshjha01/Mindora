@@ -63,7 +63,7 @@ export async function GET() {
       id: m._id,
       userId: m.userId,
       mood: m.mood,
-      notes: m.notes || "",
+      notes: m.note || "",
       date: new Date(m.date).toLocaleString(),
     })
   })
