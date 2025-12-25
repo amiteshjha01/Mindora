@@ -81,7 +81,7 @@ export async function GET() {
     journalsSheet.addRow({
       id: j._id,
       userId: j.userId,
-      title:  j.tile ?? "",
+      title:  "",
       content: j.content,
       date: new Date(j.date).toLocaleString(),
     })
