@@ -100,7 +100,7 @@ export async function GET() {
     exercisesSheet.addRow({
       id: e._id,
       userId: e.userId,
-      name: e.exercise ?? "",
+      name: "",
       duration: e.duration || "N/A",
       completedAt: new Date(e.completedAt).toLocaleString(),
     })
