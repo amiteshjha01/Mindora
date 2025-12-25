@@ -1,8 +1,10 @@
-import { jwtVerify, SignJWT } from "jose"
+import { jwtVerify, SignJWT, type JWTPayload } from "jose"
 import { cookies } from "next/headers"
 import bcrypt from "bcryptjs"
 
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "your-secret-key-change-in-production")
+const JWT_SECRET = new TextEncoder().encode(
+  process.env.JWT_SECRET || "your-secret-key-change-in-production"
+)
 
 export interface UserPayload {
   userId: string
@@ -13,7 +15,10 @@ export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 10)
 }
 
-export async function verifyPassword(password: string, hashedPassword: string): Promise<boolean> {
+export async function verifyPassword(
+  password: string,
+  hashedPassword: string
+): Promise<boolean> {
   return bcrypt.compare(password, hashedPassword)
 }
 
@@ -26,32 +31,33 @@ export async function createToken(payload: UserPayload): Promise<string> {
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("7d")
-    .sign(secret)
+    .sign(JWT_SECRET) // ✅ FIXED
 }
 
-
-export async function verifyToken(token: string): Promise<UserPayload | null> {
+export async function verifyToken(
+  token: string
+): Promise<UserPayload | null> {
   try {
     const verified = await jwtVerify(token, JWT_SECRET)
     return verified.payload as UserPayload
-  } catch (error) {
+  } catch {
     return null
   }
 }
 
 export async function setAuthCookie(token: string) {
-  const cookieStore = await cookies()
+  const cookieStore = cookies()
   cookieStore.set("auth-token", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 7, // 7 days
+    maxAge: 60 * 60 * 24 * 7,
     path: "/",
   })
 }
 
 export async function getAuthToken(): Promise<string | null> {
-  const cookieStore = await cookies()
+  const cookieStore = cookies()
   const token = cookieStore.get("auth-token")
   return token?.value || null
 }
@@ -63,6 +69,6 @@ export async function getCurrentUser(): Promise<UserPayload | null> {
 }
 
 export async function clearAuthCookie() {
-  const cookieStore = await cookies()
+  const cookieStore = cookies()
   cookieStore.delete("auth-token")
 }
