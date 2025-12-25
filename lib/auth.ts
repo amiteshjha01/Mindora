@@ -71,10 +71,11 @@ export async function setAuthCookie(token: string) {
 
 
 export async function getAuthToken(): Promise<string | null> {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   const token = cookieStore.get("auth-token")
   return token?.value || null
 }
+
 
 export async function getCurrentUser(): Promise<UserPayload | null> {
   const token = await getAuthToken()
@@ -82,7 +83,9 @@ export async function getCurrentUser(): Promise<UserPayload | null> {
   return verifyToken(token)
 }
 
+
 export async function clearAuthCookie() {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   cookieStore.delete("auth-token")
 }
+
