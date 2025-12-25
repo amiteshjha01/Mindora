@@ -19,9 +19,10 @@ export async function POST(request: NextRequest) {
     const sessionId = await createExerciseSession({
   userId: user.userId,
   exerciseId,
-  duration: "N/A",
+  duration: 0,
   completedAt: completedAt ? new Date(completedAt) : new Date(),
 })
+
 
 
     return NextResponse.json({ success: true, sessionId }, { status: 201 })
