@@ -59,7 +59,7 @@ export async function verifyToken(
 
 
 export async function setAuthCookie(token: string) {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   cookieStore.set("auth-token", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -68,6 +68,7 @@ export async function setAuthCookie(token: string) {
     path: "/",
   })
 }
+
 
 export async function getAuthToken(): Promise<string | null> {
   const cookieStore = cookies()
