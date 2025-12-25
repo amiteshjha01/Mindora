@@ -81,7 +81,7 @@ export async function GET() {
     journalsSheet.addRow({
       id: j._id,
       userId: j.userId,
-      title:  "",
+      title:  j.tile ?? "",
       content: j.content,
       date: new Date(j.date).toLocaleString(),
     })
@@ -100,7 +100,7 @@ export async function GET() {
     exercisesSheet.addRow({
       id: e._id,
       userId: e.userId,
-      name: e.exerciseName,
+      name: e.exercise ?? "",
       duration: e.duration || "N/A",
       completedAt: new Date(e.completedAt).toLocaleString(),
     })
