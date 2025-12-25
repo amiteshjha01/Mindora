@@ -39,11 +39,24 @@ export async function verifyToken(
 ): Promise<UserPayload | null> {
   try {
     const verified = await jwtVerify(token, JWT_SECRET)
-    return verified.payload as UserPayload
+    const payload = verified.payload
+
+    if (
+      typeof payload.userId === "string" &&
+      typeof payload.email === "string"
+    ) {
+      return {
+        userId: payload.userId,
+        email: payload.email,
+      }
+    }
+
+    return null
   } catch {
     return null
   }
 }
+
 
 export async function setAuthCookie(token: string) {
   const cookieStore = cookies()
