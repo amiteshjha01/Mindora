@@ -18,12 +18,17 @@ export async function verifyPassword(password: string, hashedPassword: string): 
 }
 
 export async function createToken(payload: UserPayload): Promise<string> {
-  return new SignJWT(payload)
+  const jwtPayload: JWTPayload = {
+    ...payload,
+  }
+
+  return new SignJWT(jwtPayload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("7d")
-    .sign(JWT_SECRET)
+    .sign(secret)
 }
+
 
 export async function verifyToken(token: string): Promise<UserPayload | null> {
   try {
